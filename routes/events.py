@@ -1,6 +1,8 @@
-from fastapi import APIRouter, Body, HTTPException, status
-from models.events import Event
+from fastapi import APIRouter, Body, HTTPException, status, Depends, Request
+from database.connection import get_session
+from models.events import Event, EventUpdate
 from typing import List
+from sqlmodel import select
 
 event_router = APIRouter(tags=["Events"])
 
@@ -8,7 +10,9 @@ events = []
 
 
 @event_router.get("/", response_model=List[Event])
-async def retrieve_all_events() -> List[Event]:
+async def retrieve_all_events(session=Depends(get_session)) -> List[Event]:
+    statement = select(Event)
+    events = session.exec(statement).all()
     return events
 
 
@@ -21,8 +25,10 @@ async def retrieve_event(id: int) -> Event:
 
 
 @event_router.post("/new")
-async def create_event(body: Event = Body(...)) -> dict:
-    events.append(body)
+async def create_event(new_event: Event, session=Depends(get_session)) -> dict:
+    session.add(new_event)
+    session.commit()
+    session.refresh(new_event)
     return {"message": "Event created successfully"}
 
 
