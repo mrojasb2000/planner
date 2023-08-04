@@ -35,21 +35,15 @@ async def create_event(new_event: Event, session=Depends(get_session)) -> dict:
     return {"message": "Event created successfully"}
 
 
-@event_router.delete("/{event_id}")
-async def delete_event(event_id: int) -> dict:
+@event_router.delete("/delete/{event_id}")
+async def delete_event(event_id: int, session=Depends(get_session)) -> dict:
     """Remove event by ID"""
-    for event in events:
-        if event.id == event_id:
-            events.remove(event)
-            return {"message": "Event deleted successfully"}
+    event = session.get(Event, event_id)
+    if event:
+        session.delete(event)
+        session.commit()
+        return {"message": "Event deleted successfully"}
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Event with supplied ID does not exist")
-
-
-@event_router.delete("/")
-async def delete_all_events() -> dict:
-    """Remove all events"""
-    events.clear()
-    return {"message": "Events deleted successfully"}
 
 
 @event_router.put("/edit/{event_id}", response_model=Event)
