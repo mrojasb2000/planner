@@ -23,7 +23,7 @@ async def retrieve_event(event_id: int, session=Depends(get_session)) -> Event:
     event = session.get(Event, event_id)
     if event:
         return event
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Event with supplied ID dows not exist")
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Event with supplied ID does not exist")
 
 
 @event_router.post("/new")
