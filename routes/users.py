@@ -22,7 +22,7 @@ async def sign_user_in(user: UserSignIn) -> dict:
     user_exist = await User.find_one(User.email == user.email)
     if not user_exist:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User with email does not exist")
-    if user_exist.password != user.password:
+    if user_exist.password == user.password:
         return {"message": "User signed in successfully"}
     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid details passed")
 
