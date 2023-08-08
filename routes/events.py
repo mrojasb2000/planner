@@ -30,7 +30,7 @@ async def create_event(body: Event) -> dict:
     return {"message": "Event created successfully"}
 
 
-@event_router.put("/{id}", response_model=Event)
+@event_router.put("/edit/{id}", response_model=Event)
 async def update_event(id: PydanticObjectId, body: EventUpdate) -> Event:
     updated_event = await event_database.update(id, body)
     if not updated_event:
