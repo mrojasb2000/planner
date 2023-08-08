@@ -38,7 +38,7 @@ async def update_event(id: PydanticObjectId, body: EventUpdate) -> Event:
     return updated_event
 
 
-@event_router.delete("/{id}")
+@event_router.delete("/delete/{id}")
 async def delete_event(id: PydanticObjectId) -> dict:
     event = await event_database.delete(id)
     if not event:
