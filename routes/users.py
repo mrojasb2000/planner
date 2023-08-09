@@ -20,6 +20,7 @@ async def sign_new_user(user: User) -> dict:
                                                                          "exists")
     hashed_password = hash_password.create_hash(user.password)
     user.password = hashed_password
+    print(f"User: {user}")
     await user_database.save(user)
     return {"message": "User created successfully"}
 
