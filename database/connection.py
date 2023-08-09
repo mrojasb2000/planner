@@ -2,12 +2,14 @@ from typing import Any, List, Optional
 from beanie import init_beanie, PydanticObjectId
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseSettings, BaseModel
+
 from models.events import Event
 from models.users import User
 
 
 class Settings(BaseSettings):
     DATABASE_URL: Optional[str] = None
+    SECRET_KEY: Optional[str] = None
 
     async def initialize_database(self):
         client = AsyncIOMotorClient(self.DATABASE_URL)
