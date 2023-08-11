@@ -2,6 +2,7 @@ anyio==3.5.0
 asgiref==3.5.0
 bcrypt==3.2.0
 beanie==1.10.4
+certifi==2023.7.22
 cffi==1.15.0
 click==8.0.4
 cryptography==36.0.2
@@ -12,6 +13,8 @@ exceptiongroup==1.1.2
 fastapi==0.74.1
 greenlet==2.0.2
 h11==0.13.0
+httpcore==0.17.3
+httpx==0.24.1
 idna==3.3
 iniconfig==2.0.0
 Jinja2==3.0.3
@@ -26,6 +29,7 @@ pycparser==2.21
 pydantic==1.9.0
 pymongo==3.12.3
 pytest==7.4.0
+pytest-asyncio==0.21.1
 python-dotenv==0.20.0
 python-jose==3.3.0
 python-multipart==0.0.5
