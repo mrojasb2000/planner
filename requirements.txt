@@ -5,6 +5,7 @@ beanie==1.10.4
 certifi==2023.7.22
 cffi==1.15.0
 click==8.0.4
+coverage==7.3.0
 cryptography==36.0.2
 dnspython==2.2.0
 ecdsa==0.17.0
