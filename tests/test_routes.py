@@ -90,7 +90,24 @@ async def test_update_event(default_client: httpx.AsyncClient, mock_event: Event
         "Authorization": f"Bearer {access_token}"
     }
 
-    url = f"/event/edit/{str(mock_event.id)}"
+    url = f"/event/{str(mock_event.id)}"
     response = await default_client.put(url, json=test_payload, headers=headers)
     assert response.status_code == 200
     assert response.json()["title"] == test_payload["title"]
+
+
+@pytest.mark.asyncio
+async def test_delete_event(default_client: httpx.AsyncClient, mock_event: Event, access_token: str) -> None:
+    test_response = {
+        "message": "Event deleted successfully"
+    }
+    url = f"/event/{str(mock_event.id)}"
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {access_token}"
+    }
+
+    response = await default_client.delete(url, headers=headers)
+
+    assert response.status_code == 200
+    assert response.json() == test_response

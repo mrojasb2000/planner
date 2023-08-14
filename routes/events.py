@@ -31,7 +31,7 @@ async def create_event(body: Event, user: str = Depends(authenticate)) -> dict:
     return {"message": "Event created successfully"}
 
 
-@event_router.put("/edit/{id}", response_model=Event)
+@event_router.put("/{id}", response_model=Event)
 async def update_event(id: PydanticObjectId, body: EventUpdate, user: str = Depends(authenticate)) -> Event:
     event = await event_database.get(id)
     if event.creator != user:
@@ -48,7 +48,7 @@ async def update_event(id: PydanticObjectId, body: EventUpdate, user: str = Depe
     return updated_event
 
 
-@event_router.delete("/delete/{id}")
+@event_router.delete("/{id}")
 async def delete_event(id: PydanticObjectId, user: str = Depends(authenticate)) -> dict:
     event = await event_database.get(id)
     if not event:
