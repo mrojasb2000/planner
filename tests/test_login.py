@@ -40,3 +40,6 @@ async def test_sign_user_in(default_client: httpx.AsyncClient) -> None:
 
     assert response.status_code == 200
     assert response.json()["token_type"] == "Bearer"
+
+
+
