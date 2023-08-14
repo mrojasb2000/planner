@@ -79,6 +79,8 @@ async def test_get_events_count(default_client: httpx.AsyncClient) -> None:
     assert len(events) == 2
 
 
+
+
 @pytest.mark.asyncio
 async def test_update_event(default_client: httpx.AsyncClient, mock_event: Event, access_token: str) -> None:
     test_payload = {
@@ -94,6 +96,51 @@ async def test_update_event(default_client: httpx.AsyncClient, mock_event: Event
     response = await default_client.put(url, json=test_payload, headers=headers)
     assert response.status_code == 200
     assert response.json()["title"] == test_payload["title"]
+
+
+@pytest.mark.asyncio
+async def test_not_found_should_returned_when_event_is_provided(default_client: httpx.AsyncClient, access_token: str) -> None:
+    test_payload = {
+        "title": "Updated FastAPI event"
+    }
+
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {access_token}"
+    }
+
+    url = f"/event/64d3ff1120c5b728c58e9b4d"
+    response = await default_client.put(url, json=test_payload, headers=headers)
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Event with supplied ID does not exist"
+
+
+@pytest.mark.asyncio
+async def test_bad_request_should_return_when_bad_creator_is_provided(default_client: httpx.AsyncClient, access_token: str) -> None:
+    new_event = Event(
+        creator="otheruser@packt.com",
+        title="FastAPI Book Launch",
+        image="https://linktomyimage.com/image.png",
+        description="We will discussing the contents of the FastAPI book in this event. Ensure to come with your own "
+                    "copy to win gifts!",
+        tags=["python", "fastapi", "book", "launch"],
+        location="Google Meet"
+    )
+    event_data = await Event.insert_one(new_event)
+
+    test_payload = {
+        "title": "Updated FastAPI event"
+    }
+
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {access_token}"
+    }
+
+    url = f"/event/{str(event_data.id)}"
+    response = await default_client.put(url, json=test_payload, headers=headers)
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Operation not allowed"
 
 
 @pytest.mark.asyncio
