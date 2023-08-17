@@ -1,7 +1,8 @@
-FROM python:3.10
-WORKDIR /app
-COPY requirements.txt /app
-RUN pip install --upgrade pip && pip install -r /app/requirements.txt
-EXPOSE 8000
+FROM tiangolo/uvicorn-gunicorn:python3.9
+
+LABEL maintainer="Mavro"
+
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+
 COPY ./ /app
-CMD ["python", "main.py"]
